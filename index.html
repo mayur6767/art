@@ -1,0 +1,134 @@
+import React, { useState } from 'react';
+
+// Main App component
+const App = () => {
+  // State to manage the current page view: 'home' or 'blog'
+  const [currentPage, setCurrentPage] = useState('home');
+  // State to manage the index of the currently displayed art blog
+  const [currentArtIndex, setCurrentArtIndex] = useState(0);
+
+  // Define the art blog content
+  const artBlogs = [
+    {
+      title: 'Sculpture',
+      description: 'Sculpture is the branch of the visual arts that operates in three dimensions. It is one of the plastic arts. Durable sculptural processes originally used carving (removal of material) and modelling (addition of material, as with clay), in stone, metal, ceramics, wood, and other materials but, since Modernism, there has been an almost complete freedom of materials and process.',
+    },
+    {
+      title: 'Sketching',
+      description: 'Sketching is a quick, unrefined drawing often done as a preliminary study or as a rapid visual note. It can serve as a foundation for more elaborate artworks or as a standalone form of expression, capturing immediate impressions and ideas with spontaneity.',
+    },
+    {
+      title: 'Filmmaking',
+      description: 'Filmmaking is the process of making a film, from an initial idea or story, through scriptwriting, shooting, editing, and screening the finished product before an audience. It is a complex art form that combines visual storytelling, sound design, and performance to create immersive experiences.',
+    },
+    {
+      title: 'Photography',
+      description: 'Photography is the art, application, and practice of creating durable images by recording light or other electromagnetic radiation, either electronically by means of an image sensor, or chemically by means of a light-sensitive material such as photographic film. It allows artists to capture moments, tell stories, and explore perspectives with light and shadow.',
+    },
+  ];
+
+  // Function to handle navigation to the blog page
+  const handleSeeBlogs = () => {
+    setCurrentPage('blog');
+    setCurrentArtIndex(0); // Start from the first blog
+  };
+
+  // Function to handle navigation to the next art blog or back to home
+  const handleNextOrHome = () => {
+    if (isLastArt) {
+      setCurrentPage('home'); // Go back to home page if it's the last art
+      setCurrentArtIndex(0); // Reset art index for next visit
+    } else {
+      setCurrentArtIndex((prevIndex) => (prevIndex + 1) % artBlogs.length); // Go to next art
+    }
+  };
+
+  // Determine if it's the last art blog
+  const isLastArt = currentArtIndex === artBlogs.length - 1;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-indigo-100 font-inter text-gray-800 flex items-center justify-center p-4">
+      {/* Main container with aesthetic shapes */}
+      <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8 md:p-12 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute -top-16 -left-16 w-48 h-48 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+        <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+
+        {/* Content area */}
+        <div className="relative z-10 text-center">
+          {currentPage === 'home' ? (
+            // Home Page Content
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] md:min-h-[400px]">
+              <h1 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-6 drop-shadow-lg">
+                Where are the artists
+              </h1>
+              <p className="text-2xl md:text-3xl font-semibold text-gray-700 mb-10">
+                Are you artist?
+              </p>
+              <button
+                onClick={handleSeeBlogs}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-purple-300"
+              >
+                See our blogs
+              </button>
+            </div>
+          ) : (
+            // Blog Page Content
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] md:min-h-[400px] text-left">
+              <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-6">
+                {artBlogs[currentArtIndex].title}
+              </h2>
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-10 max-w-2xl">
+                {artBlogs[currentArtIndex].description}
+              </p>
+              <button
+                onClick={handleNextOrHome} // Changed to new handler
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-indigo-300"
+              >
+                {isLastArt ? 'Go to Home page' : 'See next art'} {/* Updated button text */}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+// Tailwind CSS configuration (add this to your public/index.html or a separate CSS file if using a build process)
+// For a quick setup, you can include the script tag directly in public/index.html head.
+/*
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+  .animate-blob {
+    animation: blob 7s infinite cubic-bezier(0.62, 0.04, 0.35, 1);
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+</style>
+*/
